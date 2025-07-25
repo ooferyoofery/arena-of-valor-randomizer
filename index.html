@@ -1,0 +1,814 @@
+<!DOCTYPE html>
+<html lang="vi" data-bs-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Liên Quân Mobile - Randomizer Nâng cao</title>
+    
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" xintegrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: #111827;
+        }
+        .card {
+            background-color: #1F2937;
+            border-color: #374151;
+            height: 100%;
+        }
+        .lock-icon {
+            cursor: pointer;
+            transition: color 0.2s;
+            color: #6B7280; /* Màu mặc định của icon */
+        }
+        .lock-icon.locked {
+            color: #34D399; /* Màu xanh khi khóa */
+        }
+        .btn-random {
+            background: linear-gradient(90deg, #F59E0B, #EF4444);
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px 0 rgba(239, 68, 68, 0.4);
+            border: none;
+        }
+        .btn-random:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px 0 rgba(245, 158, 11, 0.5);
+        }
+        .btn-random:disabled {
+            background: #4B5563;
+            box-shadow: none;
+            cursor: not-allowed;
+            transform: none;
+        }
+        .asset-image, .item-image {
+            background-color: #374151;
+            object-fit: cover;
+            border: 2px solid #4B5563;
+        }
+        .category-title {
+            color: #D1D5DB;
+        }
+        .asset-name {
+            color: #F9FAFB;
+        }
+        .text-amber-400 {
+            color: #FBBF24;
+        }
+        .form-check-input:checked {
+            background-color: #F59E0B;
+            border-color: #F59E0B;
+        }
+        .config-label {
+            font-size: 0.9rem;
+        }
+    </style>
+</head>
+<body class="text-white">
+
+    <div class="container py-4 py-md-5">
+        <header class="text-center mb-5">
+            <h1 class="display-4 fw-bold text-amber-400">Liên Quân Randomizer</h1>
+            <p class="text-secondary mt-2">Tạo ra những build "độc lạ" cho trận đấu thêm phần thú vị!</p>
+        </header>
+
+        <main class="row g-4">
+            
+            <!-- Cột Trái - Kết quả -->
+            <div class="col-lg-8">
+                <div class="row g-4">
+                    <div class="col-md-6">
+                        <!-- Tướng -->
+                        <div id="hero-card" class="card p-3 rounded-3">
+                             <div class="d-flex justify-content-between align-items-center mb-3">
+                                <h2 class="h5 mb-0 category-title fw-bold">Tướng & Vị Trí</h2>
+                                <svg class="lock-icon" data-category="hero" width="24" height="24" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M13.5 10.5V6.75a4.5 4.5 0 1 0-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 0 0 2.25-2.25v-6.75a2.25 2.25 0 0 0-2.25-2.25H4.5A2.25 2.25 0 0 0 2.25 9v6.75a2.25 2.25 0 0 0 2.25 2.25Z" /></svg>
+                            </div>
+                            <div class="d-flex align-items-center">
+                                <img id="hero-image" src="https://placehold.co/80x80/374151/FFFFFF?text=?" alt="Tướng" class="asset-image rounded me-3" width="80" height="80">
+                                <div>
+                                    <p id="hero-name" class="h6 fw-semibold asset-name mb-1">Chưa xác định</p>
+                                    <p id="hero-lane" class="small text-secondary mb-0">Chưa xác định</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                     <div class="col-md-6">
+                        <!-- Phép Bổ Trợ -->
+                        <div id="talent-card" class="card p-3 rounded-3">
+                            <div class="d-flex justify-content-between align-items-center mb-3">
+                                <h2 class="h5 mb-0 category-title fw-bold">Phép Bổ Trợ</h2>
+                                <svg class="lock-icon" data-category="talent" width="24" height="24" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M13.5 10.5V6.75a4.5 4.5 0 1 0-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 0 0 2.25-2.25v-6.75a2.25 2.25 0 0 0-2.25-2.25H4.5A2.25 2.25 0 0 0 2.25 9v6.75a2.25 2.25 0 0 0 2.25 2.25Z" /></svg>
+                            </div>
+                            <div class="d-flex align-items-center">
+                                <img id="talent-image" src="https://placehold.co/80x80/374151/FFFFFF?text=?" alt="Phép Bổ Trợ" class="asset-image rounded me-3" width="80" height="80">
+                                <p id="talent-name" class="h6 fw-semibold asset-name mb-0">Chưa xác định</p>
+                            </div>
+                        </div>
+                    </div>
+                     <div class="col-md-6">
+                        <!-- Phù Hiệu -->
+                        <div id="enchantment-card" class="card p-3 rounded-3">
+                            <div class="d-flex justify-content-between align-items-center mb-3">
+                                <h2 class="h5 mb-0 category-title fw-bold">Phù Hiệu</h2>
+                                <svg class="lock-icon" data-category="enchantment" width="24" height="24" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M13.5 10.5V6.75a4.5 4.5 0 1 0-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 0 0 2.25-2.25v-6.75a2.25 2.25 0 0 0-2.25-2.25H4.5A2.25 2.25 0 0 0 2.25 9v6.75a2.25 2.25 0 0 0 2.25 2.25Z" /></svg>
+                            </div>
+                            <div class="d-flex flex-column gap-1 justify-content-center h-100">
+                                <p id="enchantment-main" class="asset-name mb-0">Nhánh chính: Chưa xác định</p>
+                                <p id="enchantment-sub1" class="small text-white-50 mb-0">Nhánh phụ 1: Chưa xác định</p>
+                                <p id="enchantment-sub2" class="small text-white-50 mb-0">Nhánh phụ 2: Chưa xác định</p>
+                            </div>
+                        </div>
+                    </div>
+                     <div class="col-12">
+                        <!-- Trang Bị -->
+                        <div id="build-card" class="card p-3 rounded-3">
+                            <div class="d-flex justify-content-between align-items-center mb-3">
+                                <h2 class="h5 mb-0 category-title fw-bold">Trang Bị</h2>
+                                <svg class="lock-icon" data-category="build" width="24" height="24" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M13.5 10.5V6.75a4.5 4.5 0 1 0-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 0 0 2.25-2.25v-6.75a2.25 2.25 0 0 0-2.25-2.25H4.5A2.25 2.25 0 0 0 2.25 9v6.75a2.25 2.25 0 0 0 2.25 2.25Z" /></svg>
+                            </div>
+                            <div id="build-items" class="row row-cols-6 g-2">
+                                <!-- Item slots will be generated by JS -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Cột Phải - Cấu hình -->
+            <div class="col-lg-4">
+                <div id="config-card" class="card p-3 rounded-3">
+                    <h2 class="h5 mb-3 category-title fw-bold">Cấu hình Build</h2>
+                    <div class="d-flex flex-column gap-3">
+                        <div class="form-check form-switch">
+                            <input class="form-check-input" type="checkbox" role="switch" id="config-forceShoes" checked>
+                            <label class="form-check-label config-label" for="config-forceShoes">Luôn có Giày trong build</label>
+                        </div>
+                        <hr class="my-1 border-secondary">
+
+                        <!-- Item Tier Selection -->
+                        <p class="mb-1 fw-semibold text-white-50">Chế độ lên đồ:</p>
+                         <div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="itemTierMode" id="config-tier-final" value="final" checked>
+                                <label class="form-check-label config-label" for="config-tier-final">
+                                    Chỉ trang bị cuối (Cấp 3)
+                                </label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="itemTierMode" id="config-tier-all" value="all">
+                                <label class="form-check-label config-label" for="config-tier-all">
+                                    Bao gồm mọi cấp độ
+                                </label>
+                            </div>
+                        </div>
+                        <hr class="my-1 border-secondary">
+                        
+                        <p class="mb-1 fw-semibold text-white-50">Loại trang bị được phép:</p>
+                        <div class="form-check form-switch">
+                            <input class="form-check-input" type="checkbox" role="switch" id="config-attack" data-item-type="attack" checked>
+                            <label class="form-check-label config-label" for="config-attack">Trang bị Công</label>
+                        </div>
+                        <div class="form-check form-switch">
+                            <input class="form-check-input" type="checkbox" role="switch" id="config-magic" data-item-type="magic" checked>
+                            <label class="form-check-label config-label" for="config-magic">Trang bị Phép</label>
+                        </div>
+                        <div class="form-check form-switch">
+                            <input class="form-check-input" type="checkbox" role="switch" id="config-defense" data-item-type="defense" checked>
+                            <label class="form-check-label config-label" for="config-defense">Trang bị Thủ</label>
+                        </div>
+                         <div class="form-check form-switch">
+                            <input class="form-check-input" type="checkbox" role="switch" id="config-jungle" data-item-type="jungle" checked>
+                            <label class="form-check-label config-label" for="config-jungle">Trang bị Đi Rừng</label>
+                        </div>
+                         <div class="form-check form-switch">
+                            <input class="form-check-input" type="checkbox" role="switch" id="config-support" data-item-type="support" checked>
+                            <label class="form-check-label config-label" for="config-support">Trang bị Hỗ Trợ</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+        
+        <footer class="mt-5 text-center">
+            <button id="randomize-button" class="btn btn-random text-white fw-bold py-3 px-5 rounded-pill fs-5">
+                Ngẫu Nhiên Hóa!
+            </button>
+        </footer>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" xintegrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+    
+    <script>
+// --- DATABASE ---
+const gameData = {
+    heroes: [
+        { name: 'Airi', image: 'assets/tuong/airi.png' },
+        { name: 'Aleister', image: 'assets/tuong/aleister.png' },
+        { name: 'Alice', image: 'assets/tuong/alice.png' },
+        { name: 'Allain', image: 'assets/tuong/allain.png' },
+        { name: 'Amily', image: 'assets/tuong/amily.png' },
+        { name: 'Annette', image: 'assets/tuong/annette.png' },
+        { name: 'Aoi', image: 'assets/tuong/aoi.png' },
+        { name: 'Arduin', image: 'assets/tuong/arduin.png' },
+        { name: 'Arthur', image: 'assets/tuong/arthur.png' },
+        { name: 'Arum', image: 'assets/tuong/arum.png' },
+        { name: 'Astrid', image: 'assets/tuong/astrid.png' },
+        { name: 'Ata', image: 'assets/tuong/ata.png' },
+        { name: 'Aya', image: 'assets/tuong/aya.png' },
+        { name: 'Azzenka', image: 'assets/tuong/azzenka.png' },
+        { name: 'Baldum', image: 'assets/tuong/baldum.png' },
+        { name: 'Bijan', image: 'assets/tuong/bijan.png' },
+        { name: 'Billow', image: 'assets/tuong/billow.png' },
+        { name: 'Biron', image: 'assets/tuong/biron.png' },
+        { name: 'Boltbaron', image: 'assets/tuong/boltbaron.png' },
+        { name: 'Bonnie', image: 'assets/tuong/bonnie.png' },
+        { name: 'Bright', image: 'assets/tuong/bright.png' },
+        { name: 'Butterfly', image: 'assets/tuong/butterfly.png' },
+        { name: 'Capheny', image: 'assets/tuong/capheny.png' },
+        { name: 'Celica', image: 'assets/tuong/celica.png' },
+        { name: 'Charlotte', image: 'assets/tuong/charlotte.png' },
+        { name: 'Chaugnar', image: 'assets/tuong/chaugnar.png' },
+        { name: 'Cresht', image: 'assets/tuong/cresht.png' },
+        { name: 'Darcy', image: 'assets/tuong/darcy.png' },
+        { name: 'Dextra', image: 'assets/tuong/dextra.png' },
+        { name: 'Diaochan', image: 'assets/tuong/diaochan.png' },
+        { name: 'Dirak', image: 'assets/tuong/dirak.png' },
+        { name: 'Dolia', image: 'assets/tuong/dolia.png' },
+        { name: 'Elandorr', image: 'assets/tuong/elandorr.png' },
+        { name: 'Elsu', image: 'assets/tuong/elsu.png' },
+        { name: 'Enzo', image: 'assets/tuong/enzo.png' },
+        { name: 'Erin', image: 'assets/tuong/erin.png' },
+        { name: 'Errol', image: 'assets/tuong/errol.png' },
+        { name: 'Fennik', image: 'assets/tuong/fennik.png' },
+        { name: 'Florentino', image: 'assets/tuong/florentino.png' },
+        { name: 'Gildur', image: 'assets/tuong/gildur.png' },
+        { name: 'Goverra', image: 'assets/tuong/goverra.jpg' },
+        { name: 'Grakk', image: 'assets/tuong/grakk.png' },
+        { name: 'Hayate', image: 'assets/tuong/hayate.png' },
+        { name: 'Heino', image: 'assets/tuong/heino.jpg' },
+        { name: 'Helen', image: 'assets/tuong/helen.png' },
+        { name: 'Iggy', image: 'assets/tuong/iggy.png' },
+        { name: 'Ignis', image: 'assets/tuong/ignis.png' },
+        { name: 'Ilumia', image: 'assets/tuong/ilumia.png' },
+        { name: 'Ishar', image: 'assets/tuong/ishar.png' },
+        { name: 'Jinna', image: 'assets/tuong/jinna.png' },
+        { name: 'Kahlii', image: 'assets/tuong/kahlii.png' },
+        { name: 'Kaine', image: 'assets/tuong/kaine.png' },
+        { name: 'Keera', image: 'assets/tuong/keera.png' },
+        { name: 'Kilgroth', image: 'assets/tuong/kilgroth.png' },
+        { name: 'Kriknak', image: 'assets/tuong/kriknak.png' },
+        { name: 'Krixi', image: 'assets/tuong/krixi.png' },
+        { name: 'Krizzix', image: 'assets/tuong/krizzix.png' },
+        { name: 'Lauriel', image: 'assets/tuong/lauriel.png' },
+        { name: 'Laville', image: 'assets/tuong/laville.png' },
+        { name: 'Liliana', image: 'assets/tuong/liliana.png' },
+        { name: 'Lindis', image: 'assets/tuong/lindis.png' },
+        { name: 'Lorion', image: 'assets/tuong/lorion.png' },
+        { name: 'Lubu', image: 'assets/tuong/lubu.png' },
+        { name: 'Lumburr', image: 'assets/tuong/lumburr.png' },
+        { name: 'Maloch', image: 'assets/tuong/maloch.png' },
+        { name: 'Marja', image: 'assets/tuong/marja.png' },
+        { name: 'Max', image: 'assets/tuong/max.png' },
+        { name: 'Mganga', image: 'assets/tuong/mganga.png' },
+        { name: 'Mina', image: 'assets/tuong/mina.png' },
+        { name: 'Ming', image: 'assets/tuong/ming.png' },
+        { name: 'Moren', image: 'assets/tuong/moren.png' },
+        { name: 'Murad', image: 'assets/tuong/murad.png' },
+        { name: 'Nakroth', image: 'assets/tuong/nakroth.png' },
+        { name: 'Natalya', image: 'assets/tuong/natalya.png' },
+        { name: 'Omega', image: 'assets/tuong/omega.png' },
+        { name: 'Omen', image: 'assets/tuong/omen.png' },
+        { name: 'Ormarr', image: 'assets/tuong/ormarr.png' },
+        { name: 'Paine', image: 'assets/tuong/paine.png' },
+        { name: 'Preyta', image: 'assets/tuong/preyta.png' },
+        { name: 'Qi', image: 'assets/tuong/qi.png' },
+        { name: 'Quillen', image: 'assets/tuong/quillen.png' },
+        { name: 'Raz', image: 'assets/tuong/raz.png' },
+        { name: 'Richter', image: 'assets/tuong/richter.png' },
+        { name: 'Rouie', image: 'assets/tuong/rouie.png' },
+        { name: 'Rourke', image: 'assets/tuong/rourke.png' },
+        { name: 'Roxie', image: 'assets/tuong/roxie.png' },
+        { name: 'Ryoma', image: 'assets/tuong/ryoma.png' },
+        { name: 'Sephera', image: 'assets/tuong/sephera.png' },
+        { name: 'Sinestrea', image: 'assets/tuong/sinestrea.png' },
+        { name: 'Skud', image: 'assets/tuong/skud.png' },
+        { name: 'Slimz', image: 'assets/tuong/slimz.png' },
+        { name: 'Stuart', image: 'assets/tuong/stuart.png' },
+        { name: 'Superman', image: 'assets/tuong/superman.png' },
+        { name: 'Taara', image: 'assets/tuong/taara.png' },
+        { name: 'Tachi', image: 'assets/tuong/tachi.png' },
+        { name: 'Teemee', image: 'assets/tuong/teemee.png' },
+        { name: 'Telannas', image: 'assets/tuong/telannas.png' },
+        { name: 'Terri', image: 'assets/tuong/terri.png' },
+        { name: 'Thane', image: 'assets/tuong/thane.png' },
+        { name: 'Thejoker', image: 'assets/tuong/thejoker.png' },
+        { name: 'Thorne', image: 'assets/tuong/thorne.png' },
+        { name: 'Toro', image: 'assets/tuong/toro.png' },
+        { name: 'Tulen', image: 'assets/tuong/tulen.png' },
+        { name: 'Valhein', image: 'assets/tuong/valhein.png' },
+        { name: 'Veera', image: 'assets/tuong/veera.png' },
+        { name: 'Veres', image: 'assets/tuong/veres.png' },
+        { name: 'Violet', image: 'assets/tuong/violet.png' },
+        { name: 'Volkath', image: 'assets/tuong/volkath.png' },
+        { name: 'Wiro', image: 'assets/tuong/wiro.png' },
+        { name: 'Wisp', image: 'assets/tuong/wisp.png' },
+        { name: 'Wonderwoman', image: 'assets/tuong/wonderwoman.png' },
+        { name: 'Wukong', image: 'assets/tuong/wukong.png' },
+        { name: 'Xeniel', image: 'assets/tuong/xeniel.png' },
+        { name: 'Yan', image: 'assets/tuong/yan.png' },
+        { name: 'Ybneth', image: 'assets/tuong/ybneth.png' },
+        { name: 'Yena', image: 'assets/tuong/yena.png' },
+        { name: 'Yorn', image: 'assets/tuong/yorn.png' },
+        { name: 'Yue', image: 'assets/tuong/yue.png' },
+        { name: 'Zanis', image: 'assets/tuong/zanis.png' },
+        { name: 'Zata', image: 'assets/tuong/zata.png' },
+        { name: 'Zephys', image: 'assets/tuong/zephys.png' },
+        { name: 'Zill', image: 'assets/tuong/zill.png' },
+        { name: 'Zip', image: 'assets/tuong/zip.png' },
+        { name: 'Zuka', image: 'assets/tuong/zuka.png' }
+    ],
+    lanes: ['Đường Tà Thần Caesar', 'Đi Rừng', 'Đường Giữa', 'Đường Rồng (Xạ Thủ)', 'Trợ Thủ'],
+    talents: [
+        { name: 'Tốc Hành', image: 'assets/phepphutro/toc-hanh.png' },
+        { name: 'Tốc Biến', image: 'assets/phepphutro/toc-bien.png' },
+        { name: 'Trừng Trị', image: 'assets/phepphutro/trung-tri.png' },
+        { name: 'Gầm Thét', image: 'assets/phepphutro/gam-thet.png' },
+        { name: 'Cấp Cứu', image: 'assets/phepphutro/cap-cuu.png' },
+        { name: 'Viện binh Liên Hiệp', image: 'assets/phepphutro/vien-binh-lien-hiep.png' },
+        { name: 'Thanh Tẩy', image: 'assets/phepphutro/thanh-tay.png' },
+        { name: 'Suy Nhược', image: 'assets/phepphutro/suy-nhuoc.png' },
+        { name: 'Bộc Phá', image: 'assets/phepphutro/boc-pha.png' }
+    ],
+    items: {
+        attack: [
+            { name: 'Chuỳ băng sương', image: 'assets/trangbi/cong/chuy-bang-suong.png', tier: 3 },
+            { name: 'Chuỳ cơ', image: 'assets/trangbi/cong/chuy-co.png', tier: 1 },
+            { name: 'Chuỳ máu', image: 'assets/trangbi/cong/chuy-mau.png', tier: 1 },
+            { name: 'Chuỳ xích', image: 'assets/trangbi/cong/chuy-xich.png', tier: 1 },
+            { name: 'Cung tà ma', image: 'assets/trangbi/cong/cung-ta-ma.png', tier: 3 },
+            { name: 'Dao găm', image: 'assets/trangbi/cong/dao-gam.png', tier: 1 },
+            { name: 'Đao truy hồn', image: 'assets/trangbi/cong/dao-truy-hon.png', tier: 3 },
+            { name: 'Diệt thần cung', image: 'assets/trangbi/cong/diet-than-cung.png', tier: 3 },
+            { name: 'Găng tay', image: 'assets/trangbi/cong/gang-tay.png', tier: 1 },
+            { name: 'Gươm sấm sét', image: 'assets/trangbi/cong/guom-sam-set.png', tier: 3 },
+            { name: 'Gươm Uriel', image: 'assets/trangbi/cong/guom-uriel.png', tier: 3 },
+            { name: 'Huyết cung', image: 'assets/trangbi/cong/huyet-cung.png', tier: 2 },
+            { name: 'Huyết đao', image: 'assets/trangbi/cong/Huyet-dao.png', tier: 2 },
+            { name: 'Kiếm dài', image: 'assets/trangbi/cong/kiem-dai.png', tier: 2 },
+            { name: 'Kiếm Fafnir', image: 'assets/trangbi/cong/kiem-fafnir.png', tier: 3 },
+            { name: 'Kiếm Muramasa', image: 'assets/trangbi/cong/kiem-muramasa.png', tier: 3 },
+            { name: 'Kiếm nhỏ', image: 'assets/trangbi/cong/kiem-nho.png', tier: 1 },
+            { name: 'Liềm đoạt mệnh', image: 'assets/trangbi/cong/liem-doat-menh.png', tier: 3 },
+            { name: 'Nanh Fenrir', image: 'assets/trangbi/cong/nanh-fenrir.png', tier: 3 },
+            { name: 'Phi tiêu', image: 'assets/trangbi/cong/phi-tieu.png', tier: 2 },
+            { name: 'Phức hợp kiếm', image: 'assets/trangbi/cong/phuc-hop-kiem.png', tier: 3 },
+            { name: 'Quỷ kiếm', image: 'assets/trangbi/cong/quy-kiem.png', tier: 3 },
+            { name: 'Song đao bão táp', image: 'assets/trangbi/cong/song-dao-bao-tap.png', tier: 3 },
+            { name: 'Song đao', image: 'assets/trangbi/cong/song-dao.png', tier: 2 },
+            { name: 'Thánh kiếm', image: 'assets/trangbi/cong/thanh-kiem.png', tier: 3 },
+            { name: 'Thương đấu sĩ', image: 'assets/trangbi/cong/thuong-dau-si.png', tier: 2 },
+            { name: 'Thương khung kiếm', image: 'assets/trangbi/cong/thuong-khung-kiem.png', tier: 3 },
+            { name: 'Thương Longinus', image: 'assets/trangbi/cong/thuong-longinus.png', tier: 3 },
+            { name: 'Thương xuyên phá', image: 'assets/trangbi/cong/thuong-xuyen-pha.png', tier: 3 },
+            { name: 'Vuốt hung tàn', image: 'assets/trangbi/cong/vuot-hung-tan.png', tier: 3 },
+            { name: 'Xạ nhật cung', image: 'assets/trangbi/cong/xa-nhat-cung.png', tier: 3 }
+        ],
+        magic: [
+            { name: 'Băng nhẫn Skadi', image: 'assets/trangbi/phep/bang-nhan-skadi.png', tier: 3 },
+            { name: 'Cầu băng sương', image: 'assets/trangbi/phep/cau-bang-suong.png', tier: 3 },
+            { name: 'Cầu chiêm tinh', image: 'assets/trangbi/phep/cau-chiem-tinh.png', tier: 2 },
+            { name: 'Dây chuyền lục bảo', image: 'assets/trangbi/phep/day-chuyen-luc-bao.png', tier: 3 },
+            { name: 'Dây chuyền ma thuật', image: 'assets/trangbi/phep/day-chuyen-ma-thuat.png', tier: 2 },
+            { name: 'Gươm nguyên tố', image: 'assets/trangbi/phep/guom-nguyen-to.png', tier: 2 },
+            { name: 'Guồn hiền triết', image: 'assets/trangbi/phep/guon-hien-triet.png', tier: 3 },
+            { name: 'Gươm tận thế', image: 'assets/trangbi/cong/guom-tan-the.png', tier: 3 },
+            { name: 'Huyết trượng', image: 'assets/trangbi/phep/huyet-truong.png', tier: 2 },
+            { name: 'Ma pháp trượng bảo', image: 'assets/trangbi/phep/ma-phap-truong-bao.jpg', tier: 3 },
+            { name: 'Mặt nạ Berith', image: 'assets/trangbi/phep/mat-na-berith.png', tier: 3 },
+            { name: 'Mặt nạ ma quái', image: 'assets/trangbi/phep/mat-na-ma-quai.png', tier: 3 },
+            { name: 'Ngọc đại pháp sư', image: 'assets/trangbi/phep/ngoc-dai-phap-su.png', tier: 3 },
+            { name: 'Nhẫn Lapis', image: 'assets/trangbi/phep/nhan-lapis.png', tier: 1 },
+            { name: 'Nhẫn ma pháp', image: 'assets/trangbi/phep/nhan-ma-phap.png', tier: 1 },
+            { name: 'Phượng hoàng lệ', image: 'assets/trangbi/phep/phuong-hoang-le.png', tier: 2 },
+            { name: 'Quyền trượng Rhea', image: 'assets/trangbi/phep/quyen-truong-rhea.png', tier: 3 },
+            { name: 'Sách cổ', image: 'assets/trangbi/phep/sach-co.png', tier: 1 },
+            { name: 'Sách phép', image: 'assets/trangbi/phep/sach-phep.png', tier: 1 },
+            { name: 'Sách thánh', image: 'assets/trangbi/phep/sach-thanh.png', tier: 3 },
+            { name: 'Sách truy hồn', image: 'assets/trangbi/phep/sach-truy-hon.png', tier: 3 },
+            { name: 'Sớ ma thuật', image: 'assets/trangbi/phep/so-ma-thuat.png', tier: 2 },
+            { name: 'Thập tự kiếm', image: 'assets/trangbi/phep/thap-tu-kiem.png', tier: 3 },
+            { name: 'Thế ước Carano', image: 'assets/trangbi/phep/the-uoc-Carano.jpg', tier: 3 },
+            { name: 'Trượng băng', image: 'assets/trangbi/phep/truong-bang.png', tier: 3 },
+            { name: 'Trượng bùng nổ', image: 'assets/trangbi/phep/truong-bung-no.png', tier: 3 },
+            { name: 'Tường hỗn mang', image: 'assets/trangbi/phep/turong-hon-mang.png', tier: 3 },
+            { name: 'Vòng đức hạnh', image: 'assets/trangbi/phep/vong-duc-hanh.png', tier: 2 },
+            { name: 'Vương miện Hecate', image: 'assets/trangbi/phep/vuong-mien-hecate.png', tier: 3 },
+            { name: 'Xuyên tâm lệnh', image: 'assets/trangbi/phep/xuyen-tam-lenh.png', tier: 3 }
+        ],
+        defense: [
+            { name: 'Áo choàng băng giá', image: 'assets/trangbi/thu/ao-choang-bang-gia.png', tier: 3 },
+            { name: 'Áo choàng thần Ra', image: 'assets/trangbi/thu/ao-choang-than-ra.png', tier: 3 },
+            { name: 'Bùa sức mạnh', image: 'assets/trangbi/thu/bua-suc-manh.png', tier: 1 },
+            { name: 'Đai kháng phép', image: 'assets/trangbi/thu/dai-khang-phep.png', tier: 2 },
+            { name: 'Dây chuyền hồng ngọc', image: 'assets/trangbi/thu/day-chuyen-hong-ngoc.png', tier: 1 },
+            { name: 'Găng giác đấu', image: 'assets/trangbi/thu/gang-giac-dau.png', tier: 1 },
+            { name: 'Găng Hercules', image: 'assets/trangbi/thu/gang-hercules.png', tier: 3 },
+            { name: 'Găng thạch đấu', image: 'assets/trangbi/thu/gang-thach-dau.png', tier: 2 },
+            { name: 'Giáp chân', image: 'assets/trangbi/thu/giap-chan.png', tier: 2 },
+            { name: 'Giáp cuồng nộ', image: 'assets/trangbi/thu/giap-cuong-no.png', tier: 3 },
+            { name: 'Giáp Gaia', image: 'assets/trangbi/thu/giap-gaia.png', tier: 3 },
+            { name: 'Giáp hiệp sĩ', image: 'assets/trangbi/thu/giap-hiep-si.png', tier: 2 },
+            { name: 'Giáp hộ mệnh', image: 'assets/trangbi/thu/giap-ho-menh.png', tier: 3 },
+            { name: 'Giáp nhẹ', image: 'assets/trangbi/thu/giap-nhe.png', tier: 1 },
+            { name: 'Giáp thống khổ', image: 'assets/trangbi/thu/giap-thong-kho.png', tier: 3 },
+            { name: 'Huân chương Troy', image: 'assets/trangbi/thu/huan-chuong-troy.png', tier: 3 },
+            { name: 'Khiên huyền thoại', image: 'assets/trangbi/thu/khien-huyen-thoai.png', tier: 3 },
+            { name: 'Khiên thất truyền', image: 'assets/trangbi/thu/khien-that-truyen.png', tier: 3 },
+            { name: 'Nhẫn hồng ngọc', image: 'assets/trangbi/thu/nhan-hong-ngoc.png', tier: 1 },
+            { name: 'Nham thuẫn', image: 'assets/trangbi/thu/nham-thuan.png', tier: 3 },
+            { name: 'Phù chú trường sinh', image: 'assets/trangbi/thu/phu-chu-truong-sinh.png', tier: 3 },
+            { name: 'Tim Incubus', image: 'assets/trangbi/thu/tim-incubus.png', tier: 2 }
+        ],
+        shoes: [
+            { name: 'Giày du mục', image: 'assets/trangbi/giay/giay-du-muc.png', tier: 3 },
+            { name: 'Giày Hermes', image: 'assets/trangbi/giay/giay-hermes.png', tier: 3 },
+            { name: 'Giày kiên cường', image: 'assets/trangbi/giay/giay-kien-cuong.png', tier: 3 },
+            { name: 'Giày hộ vệ', image: 'assets/trangbi/giay/giay_ho_ve.png', tier: 3 },
+            { name: 'Giày phù thủy', image: 'assets/trangbi/giay/giay-phu-thuy.png', tier: 3 },
+            { name: 'Giày thép', image: 'assets/trangbi/giay/giay-thep.png', tier: 1 },
+            { name: 'Giày thuật sĩ', image: 'assets/trangbi/giay/giay-thuat-si.png', tier: 3 }
+        ],
+        jungle: [
+            { name: 'Cung bão tố', image: 'assets/trangbi/di-rung/cung-bao-to.png', tier: 3 },
+            { name: 'Cung gió lốc', image: 'assets/trangbi/di-rung/cung-gio-loc.png', tier: 2 },
+            { name: 'Đao truy kích', image: 'assets/trangbi/di-rung/dao-truy-kich.png', tier: 2 },
+            { name: 'Gươm hiến tế', image: 'assets/trangbi/di-rung/guom-hien-te.png', tier: 2 },
+            { name: 'Gươm Loki', image: 'assets/trangbi/di-rung/guom-loki.png', tier: 3 },
+            { name: 'Kiếm truy hồn', image: 'assets/trangbi/di-rung/kiem-truy-hon.png', tier: 3 },
+            { name: 'Rìu Gnoll', image: 'assets/trangbi/di-rung/riu-gnoll.png', tier: 2 },
+            { name: 'Rìu Leviathan', image: 'assets/trangbi/di-rung/riu-leviathan.png', tier: 3 },
+            { name: 'Rựa thợ săn', image: 'assets/trangbi/di-rung/rua-tho-san.jpg', tier: 1 }
+        ],
+        support: [
+            { name: 'Đại địa hồi huyết', image: 'assets/trangbi/phu-tro/dai-dia-hoi-huyet.png', tier: 3},
+            { name: 'Đại địa ma nhãn', image: 'assets/trangbi/phu-tro/dai-dia-ma-nhan.png', tier: 3 },
+            { name: 'Đại địa mở trói', image: 'assets/trangbi/phu-tro/dai-dia-mo-troi.png', tier: 3 },
+            { name: 'Đại địa thần khiên', image: 'assets/trangbi/phu-tro/dai-dia-than-khien.png', tier: 3 },
+            { name: 'Đại địa thần tốc', image: 'assets/trangbi/phu-tro/dai-dia-than-toc.png', tier: 3 },
+            { name: 'Hỏa hộ bảo thạch', image: 'assets/trangbi/phu-tro/hoa-ho-bao-thach.png', tier: 2 },
+            { name: 'Liệt hỏa hồi huyết', image: 'assets/trangbi/phu-tro/liet-hoa-hoi-huyet.png', tier: 3 },
+            { name: 'Liệt hỏa ma nhãn', image: 'assets/trangbi/phu-tro/liet-hoa-ma-nhan.png', tier: 3 },
+            { name: 'Liệt hỏa mở trói', image: 'assets/trangbi/phu-tro/liet-hoa-mo-troi.png', tier: 3 },
+            { name: 'Liệt hỏa thần khiên', image: 'assets/trangbi/phu-tro/liet-hoa-than-khien.png', tier: 3 },
+            { name: 'Liệt hỏa thần tốc', image: 'assets/trangbi/phu-tro/liet-hoa-than-toc.png', tier: 3 },
+            { name: 'Nguyên tố bảo thạch', image: 'assets/trangbi/phu-tro/nguyen-to-bao-thach.png', tier: 1 },
+            { name: 'Thổ hộ bảo thạch', image: 'assets/trangbi/phu-tro/tho-ho-bao-thach.png', tier: 2 }
+        ]
+    },
+    enchantments: { 
+        'Vực Hỗn Mang': ['Ma Hỏa', 'Cường Công', 'Ma Chú'], 
+        'Tháp Quang Minh': ['Thánh Thuẫn', 'Xuyên Tâm', 'Thần Quang'], 
+        'Rừng Nguyên Sinh': ['Mộc Giáp', 'Canh Gác', 'Du Hiệp'], 
+    }
+};
+
+// --- STATE MANAGEMENT ---
+const locks = { hero: false, talent: false, enchantment: false, build: false };
+
+// --- UI ELEMENTS ---
+const ui = {
+    heroImage: document.getElementById('hero-image'),
+    heroName: document.getElementById('hero-name'),
+    heroLane: document.getElementById('hero-lane'),
+    talentImage: document.getElementById('talent-image'),
+    talentName: document.getElementById('talent-name'),
+    enchantmentMain: document.getElementById('enchantment-main'),
+    enchantmentSub1: document.getElementById('enchantment-sub1'),
+    enchantmentSub2: document.getElementById('enchantment-sub2'),
+    buildItems: document.getElementById('build-items'),
+    randomizeButton: document.getElementById('randomize-button'),
+    lockIcons: document.querySelectorAll('.lock-icon'),
+    buildConfig: {
+        forceShoes: document.getElementById('config-forceShoes'),
+        itemTypes: document.querySelectorAll('[data-item-type]'),
+        tierMode: document.getElementsByName('itemTierMode')
+    }
+};
+
+// --- HELPER FUNCTIONS ---
+const getRandomElement = (arr) => arr.length > 0 ? arr[Math.floor(Math.random() * arr.length)] : null;
+const shuffleArray = (arr) => arr.sort(() => 0.5 - Math.random());
+
+// --- LOGIC FUNCTIONS ---
+function generateRandomBuild(lane, talent) {
+    let fullBuild = [];
+    const buildSize = 6;
+    
+    // 1. Get build configuration from UI
+    const config = {
+        forceShoes: ui.buildConfig.forceShoes.checked,
+        allowedTypes: {},
+        tierMode: document.querySelector('input[name="itemTierMode"]:checked').value
+    };
+    ui.buildConfig.itemTypes.forEach(checkbox => {
+        config.allowedTypes[checkbox.dataset.itemType] = checkbox.checked;
+    });
+
+    // Helper function to check if an item is a shoe
+    const isShoe = (item) => gameData.items.shoes.some(shoe => shoe.name === item.name);
+
+    // 2. Create filtered pools for each item type
+    const pools = {};
+    for (const type in gameData.items) {
+        // We need to create a pool for shoes regardless of the checkbox to use later
+        if (config.allowedTypes[type] || type === 'shoes') {
+            pools[type] = gameData.items[type].filter(item => {
+                if (config.tierMode === 'final') {
+                    // **FIXED LOGIC**: In final tier mode, shoes should be tier 3 (as per new data), others are tier 3
+                    return item.tier === 3;
+                }
+                return true; // 'all' mode
+            });
+        } else {
+            pools[type] = [];
+        }
+    }
+
+    // 3. Handle mandatory/special items
+    if (lane === 'Trợ Thủ' && pools.support.length > 0) {
+        fullBuild.push(getRandomElement(pools.support));
+    }
+    if (talent.name === 'Trừng Trị' && pools.jungle.length > 0) {
+        fullBuild.push(getRandomElement(pools.jungle));
+    }
+    if (config.forceShoes && pools.shoes.length > 0) {
+        fullBuild.push(getRandomElement(pools.shoes));
+    }
+
+    // 4. Create the main pool for filling the rest
+    let mainPool = [];
+    ['attack', 'magic', 'defense'].forEach(type => {
+        if (pools[type]) mainPool.push(...pools[type]);
+    });
+    // If shoes are not forced, add them to the general pool for a chance to be picked
+    if (!config.forceShoes) {
+        mainPool.push(...pools.shoes);
+    }
+    
+    // 5. Fill remaining slots, ensuring rules are followed
+    shuffleArray(mainPool);
+    while (fullBuild.length < buildSize && mainPool.length > 0) {
+        const itemToAdd = mainPool.pop();
+
+        if (!itemToAdd) continue;
+
+        // Rule: Check for name uniqueness (already added items)
+        if (fullBuild.some(existingItem => existingItem && existingItem.name === itemToAdd.name)) {
+            continue;
+        }
+
+        // **FIXED LOGIC**: Only one pair of shoes allowed, ever.
+        if (isShoe(itemToAdd) && fullBuild.some(isShoe)) {
+            continue;
+        }
+        
+        // Passed all checks, add to build
+        fullBuild.push(itemToAdd);
+    }
+    
+    // 6. Move shoes to the first slot if they exist
+    const shoeIndex = fullBuild.findIndex(item => item && isShoe(item));
+    if (shoeIndex > 0) {
+        const shoeItem = fullBuild.splice(shoeIndex, 1)[0];
+        fullBuild.unshift(shoeItem);
+    }
+
+    return fullBuild;
+}
+
+
+// --- UI UPDATE FUNCTIONS ---
+function updateHeroUI(result = null) {
+    const hero = result ? result.hero : getRandomElement(gameData.heroes);
+    const lane = result ? result.lane : getRandomElement(gameData.lanes);
+    ui.heroImage.src = hero.image;
+    ui.heroName.textContent = hero.name;
+    ui.heroLane.textContent = lane;
+    return { hero, lane };
+}
+
+function updateTalentUI(talent = null) {
+    const finalTalent = talent || getRandomElement(gameData.talents);
+    ui.talentImage.src = finalTalent.image;
+    ui.talentName.textContent = finalTalent.name;
+    return finalTalent;
+}
+
+function updateEnchantmentsUI(result = null) {
+    let mainBranchName, mainEnchantment, subEnchantment1, subEnchantment2, subBranch1Name, subBranch2Name;
+    if (result) {
+        ({ mainBranchName, mainEnchantment, subEnchantment1, subEnchantment2, subBranch1Name, subBranch2Name } = result);
+    } else {
+        const mainBranches = Object.keys(gameData.enchantments);
+        mainBranchName = getRandomElement(mainBranches);
+        mainEnchantment = getRandomElement(gameData.enchantments[mainBranchName]);
+        const subBranchPool = mainBranches.filter(b => b !== mainBranchName);
+        subBranch1Name = getRandomElement(subBranchPool);
+        subEnchantment1 = getRandomElement(gameData.enchantments[subBranch1Name]);
+        let subBranch2Name = getRandomElement(subBranchPool);
+        if (subBranchPool.length > 1) {
+            while (subBranch2Name === subBranch1Name) { subBranch2Name = getRandomElement(subBranchPool); }
+        }
+        subEnchantment2 = getRandomElement(gameData.enchantments[subBranch2Name]);
+    }
+    ui.enchantmentMain.textContent = `Nhánh chính: ${mainBranchName} -> ${mainEnchantment}`;
+    ui.enchantmentSub1.textContent = `Nhánh phụ 1: ${subBranch1Name} -> ${subEnchantment1}`;
+    ui.enchantmentSub2.textContent = `Nhánh phụ 2: ${subBranch2Name} -> ${subEnchantment2}`;
+}
+
+function updateBuildUI(build = null) {
+    ui.buildItems.innerHTML = '';
+    const itemsToDisplay = build && build.length > 0 ? build : Array(6).fill(null);
+    
+    while(itemsToDisplay.length < 6) {
+        itemsToDisplay.push(null);
+    }
+
+    itemsToDisplay.forEach(item => {
+        const col = document.createElement('div');
+        col.className = 'col';
+        const img = document.createElement('img');
+        if(item) {
+            img.src = item.image;
+            img.alt = item.name;
+            img.title = item.name;
+        } else {
+            img.src = 'https://placehold.co/64x64/374151/FFFFFF?text=?';
+            img.alt = 'Trang bị';
+        }
+        img.className = 'item-image w-100 rounded';
+        col.appendChild(img);
+        ui.buildItems.appendChild(col);
+    });
+}
+
+// --- ANIMATION CONTROLLER ---
+async function handleRandomizeClick() {
+    ui.randomizeButton.disabled = true;
+    ui.randomizeButton.textContent = 'Đang quay...';
+
+    // 1. Pre-determine all final results with constraints
+    let finalTalentResult;
+    if (locks.talent) {
+        const currentTalentName = ui.talentName.textContent;
+        finalTalentResult = gameData.talents.find(t => t.name === currentTalentName) || getRandomElement(gameData.talents);
+    } else {
+        finalTalentResult = getRandomElement(gameData.talents);
+    }
+
+    let finalHeroResult;
+    if (locks.hero) {
+         const currentHeroName = ui.heroName.textContent;
+         const currentLaneName = ui.heroLane.textContent;
+         finalHeroResult = {
+             hero: gameData.heroes.find(h => h.name === currentHeroName) || getRandomElement(gameData.heroes),
+             lane: currentLaneName
+         }
+    } else {
+        finalHeroResult = { 
+            hero: getRandomElement(gameData.heroes), 
+            lane: getRandomElement(gameData.lanes) 
+        };
+    }
+
+    if (finalTalentResult.name === 'Trừng Trị') {
+        finalHeroResult.lane = 'Đi Rừng'; 
+    } else if (finalHeroResult.lane === 'Đi Rừng') {
+        finalTalentResult = gameData.talents.find(t => t.name === 'Trừng Trị');
+    }
+
+    let finalEnchantmentResult = null;
+    if (!locks.enchantment) {
+         const mainBranches = Object.keys(gameData.enchantments);
+        const mainBranchName = getRandomElement(mainBranches);
+        const mainEnchantment = getRandomElement(gameData.enchantments[mainBranchName]);
+        const subBranchPool = mainBranches.filter(b => b !== mainBranchName);
+        const subBranch1Name = getRandomElement(subBranchPool);
+        const subEnchantment1 = getRandomElement(gameData.enchantments[subBranch1Name]);
+        let subBranch2Name = getRandomElement(subBranchPool);
+        if (subBranchPool.length > 1) {
+            while (subBranch2Name === subBranch1Name) { subBranch2Name = getRandomElement(subBranchPool); }
+        }
+        const subEnchantment2 = getRandomElement(gameData.enchantments[subBranch2Name]);
+        finalEnchantmentResult = {mainBranchName, mainEnchantment, subEnchantment1, subEnchantment2, subBranch1Name, subBranch2Name};
+    }
+    
+    let finalBuildResult = null;
+    if (!locks.build) {
+        finalBuildResult = generateRandomBuild(finalHeroResult.lane, finalTalentResult);
+    }
+
+    // 2. Run animations
+    const runAnimation = (updateFunc, duration, finalResult) => {
+        return new Promise(resolve => {
+            const intervalId = setInterval(() => updateFunc(), 75);
+            setTimeout(() => {
+                clearInterval(intervalId);
+                updateFunc(finalResult);
+                resolve();
+            }, duration);
+        });
+    };
+
+    const runBuildAnimation = (duration, finalBuild) => {
+         return new Promise(resolve => {
+            const intervalId = setInterval(() => {
+                const tempBuild = generateRandomBuild(finalHeroResult.lane, finalTalentResult);
+                updateBuildUI(tempBuild);
+            }, 75);
+            setTimeout(() => {
+                clearInterval(intervalId);
+                updateBuildUI(finalBuild);
+                resolve();
+            }, duration);
+        });
+    }
+
+    const promises = [];
+
+    if (!locks.hero) promises.push(runAnimation(updateHeroUI, 1000, finalHeroResult));
+    if (!locks.talent) promises.push(runAnimation(updateTalentUI, 1500, finalTalentResult));
+    if (!locks.enchantment) promises.push(runAnimation(updateEnchantmentsUI, 2000, finalEnchantmentResult));
+    
+    if (!locks.build) {
+        promises.push(runBuildAnimation(2500, finalBuildResult));
+    } else {
+         // Even if locked, we need to ensure the display is correct based on any constrained changes
+         const currentBuild = [];
+         document.querySelectorAll('#build-items .item-image').forEach(img => {
+             const itemName = img.alt;
+             if(itemName !== 'Trang bị') {
+                for(const category in gameData.items) {
+                    const foundItem = gameData.items[category].find(i => i.name === itemName);
+                    if(foundItem) {
+                        currentBuild.push(foundItem);
+                        break;
+                    }
+                }
+             }
+         });
+         updateBuildUI(currentBuild);
+    }
+    
+    if(locks.hero || locks.talent) {
+        updateHeroUI(finalHeroResult);
+        updateTalentUI(finalTalentResult);
+    }
+
+    await Promise.all(promises);
+
+    ui.randomizeButton.disabled = false;
+    ui.randomizeButton.textContent = 'Ngẫu Nhiên Hóa!';
+}
+
+// --- EVENT LISTENERS ---
+ui.randomizeButton.addEventListener('click', handleRandomizeClick);
+ui.lockIcons.forEach(icon => {
+    icon.addEventListener('click', () => {
+        const category = icon.dataset.category;
+        locks[category] = !locks[category];
+        icon.classList.toggle('locked', locks[category]);
+    });
+});
+
+function initializeApp() {
+    let initialHeroResult = updateHeroUI();
+    let initialTalentResult = updateTalentUI();
+
+    // Apply constraints for initial load too
+    if (initialTalentResult.name === 'Trừng Trị') {
+        initialHeroResult.lane = 'Đi Rừng';
+    } else if (initialHeroResult.lane === 'Đi Rừng') {
+        initialTalentResult = gameData.talents.find(t => t.name === 'Trừng Trị');
+    }
+    updateHeroUI(initialHeroResult);
+    updateTalentUI(initialTalentResult);
+    
+    const initialBuildResult = generateRandomBuild(initialHeroResult.lane, initialTalentResult);
+    updateEnchantmentsUI();
+    updateBuildUI(initialBuildResult);
+}
+
+window.onload = initializeApp;
+
+    </script>
+</body>
+</html>
